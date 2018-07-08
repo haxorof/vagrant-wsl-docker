@@ -1,0 +1,9 @@
+---
+- hosts: docker
+  vars:
+    docker_daemon_config:
+      hosts:
+        - unix:///var/run/docker.sock
+        - tcp://0.0.0.0:2375
+  roles:
+    - haxorof.docker-ce
