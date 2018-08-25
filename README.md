@@ -50,3 +50,16 @@ After this point the VM is ready and the Docker daemon is started. Test the `doc
 ```console
 docker info
 ```
+
+## General usage tip
+
+After the you have setup everything and run the `vagrant up` once then from that point you can start and stop the box by
+explicitly specifying the ID. This ID can be found using the command `vagrant global-state`. Using the ID will allow you
+to start, stop and reprovision the box from any location (you do not need to go to the directory of the Vagrantfile).
+
+## Advanced
+
+If you would like to override the Ansible playbook executed to install and configure Docker then this is possible by setting
+an environment variable called `PLAYBOOK_OVERRIDE` (default: `ansible/setup-docker.yml`). Also there is a possibility to install
+additional roles that is required by the playbook run and this can be achieved by setting another environment variable called
+`REQUIREMENTS_OVERRIDE` (default: `ansible/requirements.yml`).
