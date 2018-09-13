@@ -6,16 +6,16 @@ This repository will guide you how to setup `docker` command to be used directly
 
 * VirtualBox installed in Windows
 * Vagrant installed in Windows
-* Plugin `vbguest` installed in vagrant: `vagrant plugin install vagrant-vbguest`
+* Plugin `vbguest` installed in vagrant: `vagrant plugin install vagrant-vbguest` (automatically installed via the `.vagrantplugins` file)
 
 ## How to set it up
 
 Install `docker` client by running the following inside `bash`:
 
 ```console
-wget -q https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz \
-  && tar -zxf docker-18.03.1-ce.tgz docker/docker \
-  && rm docker-18.03.1-ce.tgz \
+wget -O docker-cli.tgz -q https://download.docker.com/linux/static/stable/x86_64/docker-18.06.1-ce.tgz \
+  && tar -zxf docker-cli.tgz docker/docker \
+  && rm docker-cli.tgz \
   && sudo cp docker/docker /usr/local/bin/docker \
   && rm docker/docker && rmdir docker
 ```
