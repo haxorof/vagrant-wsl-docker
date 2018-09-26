@@ -1,0 +1,6 @@
+ansible_playbook: "ansible/setup-docker.yml"
+ansible_requirements: "ansible/requirements.yml"
+vagrant_use_host_only: 1
+vagrant_host_only_ip: "192.168.56.56"
+vagrant_host_only_netmask: "255.255.255.0"
+vagrant_host_only_adapter: 2

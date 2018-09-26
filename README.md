@@ -41,6 +41,10 @@ Time to create the VM which hosts the Docker daemon and you do this by just
 making sure your current working directory is in the root of this repository
 and run the following:
 
+**Important!** Ensure that IP range `192.168.56.1-192.168.56.255` is not used and handled by any DHCP in your network because
+this is used for the `host-only` network adapter. If this IP range is in use please look into the `Advanced` section how
+to change the configuration.
+
 ```console
 vagrant up
 ```
@@ -59,7 +63,12 @@ to start, stop and reprovision the box from any location (you do not need to go 
 
 ## Advanced
 
-If you would like to override the Ansible playbook executed to install and configure Docker then this is possible by setting
-an environment variable called `PLAYBOOK_OVERRIDE` (default: `ansible/setup-docker.yml`). Also there is a possibility to install
-additional roles that is required by the playbook run and this can be achieved by setting another environment variable called
-`REQUIREMENTS_OVERRIDE` (default: `ansible/requirements.yml`).
+If you would like to override any configuration defined in [default-config.yml](default-config.yml) then this is possible by adding a new
+file called `user-config.yml` in this directory (will be ignored by git). The easiest way to start modifying the configuration is to look
+at [default-config.yml](default-config.yml) and just create the `user-config.yml` with only the variables you want to override.
+
+For example if you want to disable the `host-only` network adapter and only use NAT, then the `user-config.yml` can look like this:
+
+```yaml
+vagrant_use_host_only: 0
+```
