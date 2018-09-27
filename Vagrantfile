@@ -23,7 +23,7 @@ else
 end
 
 Vagrant.configure("2") do |config|
-  config.vm.box = 'geerlingguy/ubuntu1604'
+  config.vm.box = yaml_config['vm_box']
   config.ssh.insert_key = false
   config.vbguest.auto_update = false
   config.vbguest.no_remote = true

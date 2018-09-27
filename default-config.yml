@@ -1,3 +1,4 @@
+vm_box: "geerlingguy/ubuntu1604"
 ansible_playbook: "ansible/setup-docker.yml"
 ansible_requirements: "ansible/requirements.yml"
 vagrant_use_host_only: 1
