@@ -16,13 +16,20 @@ if File.file?(user_config_file)
   yaml_config.merge!(user_config)
 end
 
-if Gem.win_platform?
-  vbox_adapter = 'VirtualBox Host-Only Ethernet Adapter'
+if yaml_config.key?("vagrant_host_only_adapter_name")
+  vbox_adapter = yaml_config['vagrant_host_only_adapter_name']
 else
-  vbox_adapter = 'vboxnet0'
+  if Gem.win_platform?
+    vbox_adapter = 'VirtualBox Host-Only Ethernet Adapter'
+  else
+    vbox_adapter = 'vboxnet0'
+  end
 end
 
 Vagrant.configure("2") do |config|
+  if yaml_config.key?("vm_box_url")
+    config.vm.box = yaml_config['vm_box_url']
+  end
   config.vm.box = yaml_config['vm_box']
   config.ssh.insert_key = false
   config.vbguest.auto_update = false
