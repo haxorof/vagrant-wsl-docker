@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
   end
   config.vm.box = yaml_config['vm_box']
   config.ssh.insert_key = false
-  config.vbguest.auto_update = false
+  config.vbguest.auto_update = true
   config.vbguest.no_remote = true
   drives.each do |drive|
     if "#{drive.DriveType}" === "2"

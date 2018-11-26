@@ -1,3 +1,4 @@
 .vagrant
 ansible-overrides/
 user-config.yml
+*.log

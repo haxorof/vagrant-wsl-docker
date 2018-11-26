@@ -13,7 +13,7 @@ This repository will guide you how to setup `docker` command to be used directly
 Install `docker` client by running the following inside `bash`:
 
 ```console
-wget -O docker-cli.tgz -q https://download.docker.com/linux/static/stable/x86_64/docker-18.06.1-ce.tgz \
+wget -O docker-cli.tgz -q https://download.docker.com/linux/static/stable/x86_64/docker-18.09.0.tgz \
   && tar -zxf docker-cli.tgz docker/docker \
   && rm docker-cli.tgz \
   && sudo cp docker/docker /usr/local/bin/docker \
@@ -24,6 +24,13 @@ Next is to append configuration to `~/.bashrc` for `docker` to use TCP instead o
 
 ```console
 echo 'export DOCKER_HOST=tcp://127.0.0.1:2375' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Note! Since 18.09 it is also possible to access the Docker daemon via SSH:
+
+```console
+echo 'export DOCKER_HOST=ssh://vagrant@192.168.56.56' >> ~/.bashrc
 source ~/.bashrc
 ```
 
