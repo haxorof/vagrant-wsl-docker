@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
       config.vm.synced_folder "#{drive.DriveLetter}:/", "/mnt/#{drive.DriveLetter.downcase}", :mount_options => ["rw"]
     end
   end
-  config.vm.network :forwarded_port, guest: 22, host: 2222, host_ip: "127.0.0.1", id: "ssh"
+  config.vm.network :forwarded_port, guest: 22, host: yaml_config['vagrant_ssh_port'], host_ip: "127.0.0.1", id: "ssh"
   config.vm.network :forwarded_port, guest: 2375, host: 2375, host_ip: "127.0.0.1", id: "docker"
   if "#{yaml_config['vagrant_use_host_only']}" === "1"
     config.vm.network "private_network", name: vbox_adapter,
@@ -48,8 +48,8 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |vb|
     vb.name = "vagrant-wsl-docker"
     host = RbConfig::CONFIG['host_os']
-    mem_divisor = 4 # Allocate 1/4 host memory
-    cpu_divisor = 2 # Allocated 1/2 host logical processors
+    mem_divisor = yaml_config['vagrant_mem_divisor']
+    cpu_divisor = yaml_config['vagrant_cpu_divisor']
 
     if host =~ /darwin|bsd/
       cpus = `sysctl -n hw.ncpu`.to_i

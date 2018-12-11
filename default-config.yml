@@ -1,9 +1,22 @@
 #vm_box_url: "file:///...json"
 vm_box: "geerlingguy/ubuntu1604"
+# Ansible Playbook to run 
 ansible_playbook: "ansible/setup-docker.yml"
+# Ansible Galaxy requirements file
 ansible_requirements: "ansible/requirements.yml"
+# Allocate 1/4 host memory
+vagrant_mem_divisor: 4
+# Allocated 1/2 host logical processors
+vagrant_cpu_divisor: 2
+# SSH port to access guest
+vagrant_ssh_port: 2370
+# Use host-only adapter or not (0/1)
 vagrant_use_host_only: 1
+# Host-only adapter IP (must match configuration in VirtualBox)
 vagrant_host_only_ip: "192.168.56.56"
+# Host-only adapter netmask (must match configuration in VirtualBox)
 vagrant_host_only_netmask: "255.255.255.0"
+# Host-only adapter name (must match network configuration in VirtualBox)
 #vagrant_host_only_adapter_name: "VirtualBox Host-Only Ethernet Adapter"
+# Host-only adapter number
 vagrant_host_only_adapter: 2
