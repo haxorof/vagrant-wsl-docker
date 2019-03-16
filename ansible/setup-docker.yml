@@ -8,4 +8,4 @@
     docker_users:
       - vagrant
   roles:
-    - haxorof.docker-ce
+    - haxorof.docker_ce
