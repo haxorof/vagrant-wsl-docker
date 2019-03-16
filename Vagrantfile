@@ -31,6 +31,7 @@ Vagrant.configure("2") do |config|
     config.vm.box = yaml_config['vm_box_url']
   end
   config.vm.box = yaml_config['vm_box']
+  config.vagrant.plugins = ["vagrant-vbguest"]
   config.ssh.insert_key = false
   config.vbguest.auto_update = true
   config.vbguest.no_remote = true
@@ -83,5 +84,33 @@ Vagrant.configure("2") do |config|
     ansible.playbook          = yaml_config['ansible_playbook']
     ansible.inventory_path    = "ansible/hosts"
     ansible.limit             = "docker"
+  end
+  if "#{yaml_config['vagrant_use_host_only']}" === "1"
+    config.vm.post_up_message = <<MESSAGE
+--------------------------------------------------------------------------------
+Docker VM is now ready for use!
+
+Local SSH port: #{yaml_config['vagrant_ssh_port']}
+Host-only adapter IP: #{yaml_config['vagrant_host_only_ip']}
+
+Access from outside VM:
+  export DOCKER_HOST=tcp://localhost:2375
+  
+  .. or ..
+
+  export DOCKER_HOST=tcp://#{yaml_config['vagrant_host_only_ip']}:2375
+  --------------------------------------------------------------------------------
+MESSAGE
+  else
+    config.vm.post_up_message = <<MESSAGE
+--------------------------------------------------------------------------------
+Docker VM is now ready for use!
+
+Local SSH port: #{yaml_config['vagrant_ssh_port']}
+
+Access from outside VM:
+  export DOCKER_HOST=tcp://localhost:2375
+--------------------------------------------------------------------------------
+MESSAGE
   end
 end
