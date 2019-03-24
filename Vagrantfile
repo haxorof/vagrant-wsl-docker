@@ -31,21 +31,39 @@ Vagrant.configure("2") do |config|
     config.vm.box = yaml_config['vm_box_url']
   end
   config.vm.box = yaml_config['vm_box']
-  config.vagrant.plugins = ["vagrant-vbguest"]
   config.ssh.insert_key = false
-  config.vbguest.auto_update = true
-  config.vbguest.no_remote = true
+
+  # TODO Change vagrant-proxyconf to 2.0.1 when released
+  config.vagrant.plugins = {
+      "vagrant-proxyconf" => {"version" => "1.5.2"}, 
+      "vagrant-vbguest" => {"version" => ""}
+  }
+
+  if Vagrant.has_plugin?("vagrant-vbguest")
+    config.vbguest.auto_update = true
+    config.vbguest.no_remote = true
+  end  
+
+  config.proxy.enabled = yaml_config['vagrant_proxy_enabled']
+  if Vagrant.has_plugin?("vagrant-proxyconf") and yaml_config['vagrant_proxy_enabled'] === true
+    config.proxy.http = yaml_config['vagrant_proxy_http'] === "" ? nil : yaml_config['vagrant_proxy_http']
+    config.proxy.https = yaml_config['vagrant_proxy_https'] === "" ? nil : yaml_config['vagrant_proxy_https']
+    config.proxy.no_proxy = yaml_config['vagrant_proxy_no'] === "" ? nil : yaml_config['vagrant_proxy_no']
+  end  
+
   drives.each do |drive|
     if "#{drive.DriveType}" === "2"
       config.vm.synced_folder "#{drive.DriveLetter}:/", "/mnt/#{drive.DriveLetter.downcase}", :mount_options => ["rw"]
     end
   end
+
   config.vm.network :forwarded_port, guest: 22, host: yaml_config['vagrant_ssh_port'], host_ip: "127.0.0.1", id: "ssh"
   config.vm.network :forwarded_port, guest: 2375, host: 2375, host_ip: "127.0.0.1", id: "docker"
   if "#{yaml_config['vagrant_use_host_only']}" === "1"
     config.vm.network "private_network", name: vbox_adapter,
       ip: yaml_config['vagrant_host_only_ip'], netmask: yaml_config['vagrant_host_only_netmask'], adapter: yaml_config['vagrant_host_only_adapter']
   end
+
   config.vm.provider :virtualbox do |vb|
     vb.name = "vagrant-wsl-docker"
     host = RbConfig::CONFIG['host_os']
@@ -78,13 +96,32 @@ Vagrant.configure("2") do |config|
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose           = false
     ansible.become            = true
+    ansible.playbook          = "ansible/prepare.yml"
+    ansible.inventory_path    = "ansible/hosts"
+    ansible.limit             = "docker"
+  end
+
+  config.vm.provision "ansible_local" do |ansible|
+    ansible.install           = false
+    ansible.verbose           = false
+    ansible.become            = true
     ansible.galaxy_role_file  = yaml_config['ansible_requirements']
     ansible.galaxy_roles_path = "/etc/ansible/roles"
     ansible.galaxy_command    = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.playbook          = yaml_config['ansible_playbook']
     ansible.inventory_path    = "ansible/hosts"
     ansible.limit             = "docker"
+    if yaml_config['vagrant_proxy_enabled'] === true
+      ansible.extra_vars      = {
+        docker_daemon_envs: {
+          HTTP_PROXY: "#{yaml_config['vagrant_proxy_http']}",
+          HTTPS_PROXY: "#{yaml_config['vagrant_proxy_https']}",
+          NO_PROXY: "#{yaml_config['vagrant_proxy_no']}"
+        }
+      }
+    end
   end
+
   if "#{yaml_config['vagrant_use_host_only']}" === "1"
     config.vm.post_up_message = <<MESSAGE
 --------------------------------------------------------------------------------

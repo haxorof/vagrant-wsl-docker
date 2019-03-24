@@ -20,3 +20,8 @@ vagrant_host_only_netmask: "255.255.255.0"
 #vagrant_host_only_adapter_name: "VirtualBox Host-Only Ethernet Adapter"
 # Host-only adapter number
 vagrant_host_only_adapter: 2
+# Proxy
+vagrant_proxy_enabled: false
+vagrant_proxy_https: ""
+vagrant_proxy_http: ""
+vagrant_proxy_no: "localhost,127.0.0.1,.localdomain"

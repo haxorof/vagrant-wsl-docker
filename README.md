@@ -65,7 +65,7 @@ docker info
 ## General usage tip
 
 After the you have setup everything and run the `vagrant up` once then from that point you can start and stop the box by
-explicitly specifying the ID. This ID can be found using the command `vagrant global-state`. Using the ID will allow you
+explicitly specifying the ID. This ID can be found using the command `vagrant global-status`. Using the ID will allow you
 to start, stop and reprovision the box from any location (you do not need to go to the directory of the Vagrantfile).
 
 ## Advanced
@@ -79,3 +79,16 @@ For example if you want to disable the `host-only` network adapter and only use 
 ```yaml
 vagrant_use_host_only: 0
 ```
+
+### Proxy settings
+
+You can so that the Vagrant box will use a proxy. Example below show you how to do this in your `user-config.yml`:
+
+```yaml
+vagrant_proxy_enabled: true
+vagrant_proxy_https: "http://localhost:3128"
+vagrant_proxy_http: "http://localhost:3128"
+vagrant_proxy_no: "localhost,127.0.0.1,.localdomain"
+```
+
+**IMPORTANT!** In Windows 10 `vagrant-proxyconf` plugin will work with version `1.5.2`, `2.0.1` or later.

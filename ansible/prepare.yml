@@ -1,0 +1,7 @@
+---
+- hosts: docker
+  tasks:
+    - name: Ensure git is installed
+      package:
+        name: git
+        state: present
