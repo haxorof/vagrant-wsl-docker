@@ -33,11 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = yaml_config['vm_box']
   config.ssh.insert_key = false
 
-  # TODO Change vagrant-proxyconf to 2.0.1 when released
-  config.vagrant.plugins = {
-      "vagrant-proxyconf" => {"version" => "1.5.2"}, 
-      "vagrant-vbguest" => {"version" => ""}
-  }
+  config.vagrant.plugins = ["vagrant-proxyconf", "vagrant-vbguest"]
 
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = true
