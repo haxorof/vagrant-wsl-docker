@@ -36,7 +36,7 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = ["vagrant-proxyconf", "vagrant-vbguest"]
 
   if Vagrant.has_plugin?("vagrant-vbguest")
-    config.vbguest.auto_update = true
+    config.vbguest.auto_update = yaml_config['vagrant_vbguest_enabled']
     config.vbguest.no_remote = true
   end  
 
@@ -86,11 +86,12 @@ Vagrant.configure("2") do |config|
 
     vb.customize ["modifyvm", :id, "--memory", mem]
     vb.customize ["modifyvm", :id, "--cpus", cpus]
-    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   end
 
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose           = false
+    ansible.install_mode      = "pip"
+    ansible.version           = "latest"
     ansible.become            = true
     ansible.playbook          = "ansible/prepare.yml"
     ansible.inventory_path    = "ansible/hosts"

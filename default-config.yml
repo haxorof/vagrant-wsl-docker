@@ -25,3 +25,5 @@ vagrant_proxy_enabled: false
 vagrant_proxy_https: ""
 vagrant_proxy_http: ""
 vagrant_proxy_no: "localhost,127.0.0.1,.localdomain"
+# vagrant-vbguest
+vagrant_vbguest_enabled: true
