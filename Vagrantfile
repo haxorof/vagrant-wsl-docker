@@ -40,11 +40,13 @@ Vagrant.configure("2") do |config|
     config.vbguest.no_remote = true
   end  
 
-  config.proxy.enabled = yaml_config['vagrant_proxy_enabled']
-  if Vagrant.has_plugin?("vagrant-proxyconf") and yaml_config['vagrant_proxy_enabled'] === true
-    config.proxy.http = yaml_config['vagrant_proxy_http'] === "" ? nil : yaml_config['vagrant_proxy_http']
-    config.proxy.https = yaml_config['vagrant_proxy_https'] === "" ? nil : yaml_config['vagrant_proxy_https']
-    config.proxy.no_proxy = yaml_config['vagrant_proxy_no'] === "" ? nil : yaml_config['vagrant_proxy_no']
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.enabled = yaml_config['vagrant_proxy_enabled']
+    if yaml_config['vagrant_proxy_enabled'] === true
+      config.proxy.http = yaml_config['vagrant_proxy_http'] === "" ? nil : yaml_config['vagrant_proxy_http']
+      config.proxy.https = yaml_config['vagrant_proxy_https'] === "" ? nil : yaml_config['vagrant_proxy_https']
+      config.proxy.no_proxy = yaml_config['vagrant_proxy_no'] === "" ? nil : yaml_config['vagrant_proxy_no']
+    end
   end  
 
   drives.each do |drive|
