@@ -88,8 +88,9 @@ Vagrant.configure("2") do |config|
 
     vb.customize ["modifyvm", :id, "--memory", mem]
     vb.customize ["modifyvm", :id, "--cpus", cpus]
+    vb.customize ["modifyvm", :id, "--audio", "none"]        
   end
-
+  
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose           = false
     ansible.install_mode      = "pip"
