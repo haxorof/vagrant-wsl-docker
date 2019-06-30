@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = yaml_config['vm_box']
   config.ssh.insert_key = false
 
-  config.vagrant.plugins = ["vagrant-proxyconf", "vagrant-vbguest"]
+  config.vagrant.plugins = ["vagrant-vbguest"]
 
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = yaml_config['vagrant_vbguest_enabled']
@@ -90,6 +90,20 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--cpus", cpus]
     vb.customize ["modifyvm", :id, "--audio", "none"]        
   end
+
+  $script = <<-SCRIPT
+  type pip
+  if [[ $? > 0 ]]; then
+    . /etc/os-release  
+    if [[ "$ID" == "centos" ]]; then
+      echo "Install Python PiP"
+      sudo yum install -y epel-release
+      sudo yum makecache
+      sudo yum install -y python-pip
+    fi
+  fi
+  SCRIPT
+  config.vm.provision "shell", inline: $script
   
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose           = false
