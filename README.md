@@ -74,6 +74,8 @@ If you would like to override any configuration defined in [default-config.yml](
 file called `user-config.yml` in this directory (will be ignored by git). The easiest way to start modifying the configuration is to look
 at [default-config.yml](default-config.yml) and just create the `user-config.yml` with only the variables you want to override.
 
+### Disable host-only adapter
+
 For example if you want to disable the `host-only` network adapter and only use NAT, then the `user-config.yml` can look like this:
 
 ```yaml
@@ -86,9 +88,14 @@ You can so that the Vagrant box will use a proxy. Example below show you how to 
 
 ```yaml
 vagrant_proxy_enabled: true
-vagrant_proxy_https: "http://localhost:3128"
-vagrant_proxy_http: "http://localhost:3128"
-vagrant_proxy_no: "localhost,127.0.0.1,.localdomain"
 ```
 
+To set proxy use the environment variables which `vagrant-proxyconf` looks at. Read official documentation: [vagrant-proxy](http://tmatilai.github.io/vagrant-proxyconf/)
+
 **IMPORTANT!** In Windows 10 `vagrant-proxyconf` plugin will work with version `1.5.2`, `2.0.1` or later.
+
+### Provision with different Ansible playbook
+
+If you want some else than just a simple Docker CE installation then you can override `ansible_playbook` to point to a different playbook in a sub directory of
+this repo, suggest creating directory `ansible-overrides` which is ignored by `.gitignore` and put your playbook there. You can also override the Ansible galaxy
+requirements file by setting variable `ansible_requirements`.
