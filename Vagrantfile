@@ -33,7 +33,7 @@ Vagrant.configure("2") do |config|
   config.vm.box = yaml_config['vm_box']
   config.ssh.insert_key = false
 
-  config.vagrant.plugins = ["vagrant-vbguest"]
+  config.vagrant.plugins = ["vagrant-vbguest", "vagrant-proxyconf"]
 
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = yaml_config['vagrant_vbguest_enabled']
