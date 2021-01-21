@@ -44,6 +44,7 @@ Vagrant.configure("2") do |config|
     config.proxy.enabled = yaml_config['vagrant_proxy_enabled']
   end  
 
+  config.vm.synced_folder ".", "/vagrant"
   drives.each do |drive|
     if "#{drive.DriveType}" === "2"
       config.vm.synced_folder "#{drive.DriveLetter}:/", "/mnt/#{drive.DriveLetter.downcase}", :mount_options => ["rw"]
@@ -87,22 +88,30 @@ Vagrant.configure("2") do |config|
   end
 
   $script = <<-SCRIPT
-  type pip
-  if [[ $? > 0 ]]; then
-    . /etc/os-release  
-    if [[ "$ID" == "centos" ]]; then
-      echo "Install Python PiP"
-      sudo yum install -y epel-release
-      sudo yum makecache
-      sudo yum install -y python-pip
-    fi
+  type firewall-cmd
+  if [[ $? == 0 ]]; then
+    sudo firewall-cmd --zone=public --permanent --add-port=2375/tcp
+    sudo firewall-cmd --zone=public --add-port=2375/tcp
+    sudo firewall-cmd --zone=public --permanent --add-port=2370/tcp
+    sudo firewall-cmd --zone=public --add-port=2370/tcp
   fi
   SCRIPT
   config.vm.provision "shell", inline: $script
+
+  if "#{yaml_config['vm_box']}".include?("centos/7") || "#{yaml_config['vm_box']}".include?("centos7") then
+    puts "==> CentOS 7 detected"
+    install_cmd = "sudo yum install -y epel-release python-pip haveged"
+  end
+
+  if "#{yaml_config['vm_box']}".include?("ubuntu") then
+    puts "==> Ubuntu detected"
+    install_cmd = "sudo apt-get install -y python3-pip python-is-python3 haveged && sudo ln -s -f /usr/bin/pip3 /usr/bin/pip"
+  end  
   
   config.vm.provision "ansible_local" do |ansible|
     ansible.verbose           = false
-    ansible.install_mode      = "pip"
+    ansible.install_mode      = "pip"    
+    ansible.pip_install_cmd   = "#{install_cmd}"
     ansible.version           = "latest"
     ansible.become            = true
     ansible.playbook          = "ansible/prepare.yml"

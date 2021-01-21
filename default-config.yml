@@ -1,5 +1,5 @@
 #vm_box_url: "file:///...json"
-vm_box: "centos/7"
+vm_box: "generic/ubuntu2004"
 # Ansible Playbook to run 
 ansible_playbook: "ansible/setup-docker.yml"
 # Ansible Galaxy requirements file
