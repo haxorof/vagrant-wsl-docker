@@ -1,6 +1,6 @@
 # vagrant-wsl-docker
 
-This repository will guide you how to setup `docker` command to be used directly from `bash` using Windows Subsystem for Linux (WSL).
+This repository will guide you how to setup `docker` command to be used directly from `bash` using Windows Subsystem for Linux (WSL1).
 
 ## Prerequisites
 
