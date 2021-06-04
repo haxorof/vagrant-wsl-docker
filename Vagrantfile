@@ -122,15 +122,19 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.install           = false
-    ansible.verbose           = false
-    ansible.become            = true
-    ansible.galaxy_role_file  = yaml_config['ansible_requirements']
-    ansible.galaxy_roles_path = "/etc/ansible/roles"
-    ansible.galaxy_command    = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
-    ansible.playbook          = yaml_config['ansible_playbook']
-    ansible.inventory_path    = "ansible/hosts"
-    ansible.limit             = "docker"
+    ansible.install            = false
+    ansible.compatibility_mode = "2.0"
+    ansible.install_mode       = "pip_args_only"
+    ansible.pip_install_cmd    = "#{install_cmd}"
+    ansible.pip_args           = "ansible"
+    ansible.verbose            = false
+    ansible.become             = true
+    ansible.galaxy_role_file   = yaml_config['ansible_requirements']
+    ansible.galaxy_roles_path  = "/etc/ansible/roles"
+    ansible.galaxy_command     = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
+    ansible.playbook           = yaml_config['ansible_playbook']
+    ansible.inventory_path     = "ansible/hosts"
+    ansible.limit              = "docker"
     if yaml_config['vagrant_proxy_enabled'] === true
       ansible.extra_vars      = {
         docker_daemon_envs: {
