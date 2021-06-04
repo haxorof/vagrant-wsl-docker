@@ -38,11 +38,11 @@ Vagrant.configure("2") do |config|
   if Vagrant.has_plugin?("vagrant-vbguest")
     config.vbguest.auto_update = yaml_config['vagrant_vbguest_enabled']
     config.vbguest.no_remote = true
-  end  
+  end
 
   if Vagrant.has_plugin?("vagrant-proxyconf")
     config.proxy.enabled = yaml_config['vagrant_proxy_enabled']
-  end  
+  end
 
   config.vm.synced_folder ".", "/vagrant"
   drives.each do |drive|
@@ -84,7 +84,7 @@ Vagrant.configure("2") do |config|
 
     vb.customize ["modifyvm", :id, "--memory", mem]
     vb.customize ["modifyvm", :id, "--cpus", cpus]
-    vb.customize ["modifyvm", :id, "--audio", "none"]        
+    vb.customize ["modifyvm", :id, "--audio", "none"]
   end
 
   $script = <<-SCRIPT
@@ -106,17 +106,19 @@ Vagrant.configure("2") do |config|
   if "#{yaml_config['vm_box']}".include?("ubuntu") then
     puts "==> Ubuntu detected"
     install_cmd = "sudo apt-get install -y python3-pip python-is-python3 haveged && sudo ln -s -f /usr/bin/pip3 /usr/bin/pip"
-  end  
-  
+  end
+
   config.vm.provision "ansible_local" do |ansible|
-    ansible.verbose           = false
-    ansible.install_mode      = "pip"    
-    ansible.pip_install_cmd   = "#{install_cmd}"
-    ansible.version           = "latest"
-    ansible.become            = true
-    ansible.playbook          = "ansible/prepare.yml"
-    ansible.inventory_path    = "ansible/hosts"
-    ansible.limit             = "docker"
+    ansible.verbose            = false
+    ansible.compatibility_mode = "2.0"
+    ansible.install_mode       = "pip_args_only"
+    ansible.pip_install_cmd    = "#{install_cmd}"
+    ansible.pip_args           = "ansible"
+    ansible.version            = "latest"
+    ansible.become             = true
+    ansible.playbook           = "ansible/prepare.yml"
+    ansible.inventory_path     = "ansible/hosts"
+    ansible.limit              = "docker"
   end
 
   config.vm.provision "ansible_local" do |ansible|
@@ -150,7 +152,7 @@ Host-only adapter IP: #{yaml_config['vagrant_host_only_ip']}
 
 Access from outside VM:
   export DOCKER_HOST=tcp://localhost:2375
-  
+
   .. or ..
 
   export DOCKER_HOST=tcp://#{yaml_config['vagrant_host_only_ip']}:2375
