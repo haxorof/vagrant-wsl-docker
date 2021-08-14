@@ -13,7 +13,7 @@ This repository will guide you how to setup `docker` command to be used directly
 Install `docker` client by running the following inside `bash`:
 
 ```console
-wget -O docker-cli.tgz -q https://download.docker.com/linux/static/stable/x86_64/docker-20.10.5.tgz \
+wget -O docker-cli.tgz -q https://download.docker.com/linux/static/stable/x86_64/docker-20.10.8.tgz \
   && tar -zxf docker-cli.tgz docker/docker \
   && rm docker-cli.tgz \
   && sudo cp docker/docker /usr/local/bin/docker \
