@@ -90,6 +90,8 @@ Vagrant.configure("2") do |config|
   $script = <<-SCRIPT
   type firewall-cmd
   if [[ $? == 0 ]]; then
+    sudo systemctl start firewalld
+    sudo systemctl enable firewalld
     sudo firewall-cmd --zone=public --permanent --add-port=2375/tcp
     sudo firewall-cmd --zone=public --add-port=2375/tcp
     sudo firewall-cmd --zone=public --permanent --add-port=2370/tcp
@@ -101,6 +103,11 @@ Vagrant.configure("2") do |config|
   if "#{yaml_config['vm_box']}".include?("centos/7") || "#{yaml_config['vm_box']}".include?("centos7") then
     puts "==> CentOS 7 detected"
     install_cmd = "sudo yum install -y epel-release python-pip haveged"
+  end
+
+  if "#{yaml_config['vm_box']}".include?("almalinux") || "#{yaml_config['vm_box']}".include?("almalinux") then
+    puts "==> AlmaLinux detected"
+    install_cmd = "sudo dnf install -y epel-release python-pip haveged"
   end
 
   if "#{yaml_config['vm_box']}".include?("ubuntu") then
