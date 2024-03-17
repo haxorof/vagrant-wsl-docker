@@ -138,7 +138,7 @@ Vagrant.configure("2") do |config|
     ansible.become             = true
     ansible.galaxy_role_file   = yaml_config['ansible_requirements']
     ansible.galaxy_roles_path  = "/etc/ansible/roles"
-    ansible.galaxy_command     = "sudo ansible-galaxy install --role-file=%{role_file} --roles-path=%{roles_path} --force"
+    ansible.galaxy_command     = "sudo $(which ansible-galaxy) install --role-file=%{role_file} --roles-path=%{roles_path} --force"
     ansible.playbook           = yaml_config['ansible_playbook']
     ansible.inventory_path     = "ansible/hosts"
     ansible.limit              = "docker"
