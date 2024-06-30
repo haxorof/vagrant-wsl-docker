@@ -10,15 +10,7 @@ This repository will guide you how to setup `docker` command to be used directly
 
 ## How to set it up
 
-Install `docker` client by running the following inside `bash`:
-
-```console
-wget -O docker-cli.tgz -q https://download.docker.com/linux/static/stable/x86_64/docker-25.0.4.tgz \
-  && tar -zxf docker-cli.tgz docker/docker \
-  && rm docker-cli.tgz \
-  && sudo cp docker/docker /usr/local/bin/docker \
-  && rm docker/docker && rmdir docker
-```
+Install `docker` client and docker-compose cli plugin by running bash script `install_standalone_docker_cli.sh`:
 
 Next is to append configuration to `~/.bashrc` for `docker` to use TCP instead of file:
 
